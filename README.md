@@ -1,4 +1,4 @@
-<img src="https://github.com/sshrutii/coutNmit/blob/main/cout-backend/src/images/giphy.gif" align="center" >
+<img src="https://github.com/AtharvaSDeshpande/Multiple-Language-Programming-App/blob/main/cout-backend/src/images/giphy.gif" align="center" >
 
 
 # COUT APP
