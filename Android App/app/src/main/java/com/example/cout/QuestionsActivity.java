@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -47,7 +48,7 @@ public class QuestionsActivity extends AppCompatActivity {
     // Access a Cloud Firestore instance from your Activity
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     ArrayList <questionName> myQuestionNames = new ArrayList<questionName>();
-
+String id1,lang;
 //    List<String> idList;
 
     void getDocumentIds() {
@@ -56,14 +57,13 @@ public class QuestionsActivity extends AppCompatActivity {
 
 
     }
-    String id1,lang;
     ArrayList<String> idArrayList = new ArrayList();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_questions);
-        final ProgressBar progressBar = (ProgressBar) findViewById(R.id.questionsProgressbar);
+       final ProgressBar progressBar = (ProgressBar) findViewById(R.id.questionsProgressbar);
         new Handler().postDelayed(new Runnable() {
 
             @Override
@@ -77,7 +77,6 @@ public class QuestionsActivity extends AppCompatActivity {
         Intent i  = getIntent();
         id1 = i.getStringExtra("id");
         lang = i.getStringExtra("lang");
-        Log.d("id",id1);
         db.collection("topics").document(id1).collection("questions").orderBy("timestamp", Query.Direction.ASCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -86,9 +85,12 @@ public class QuestionsActivity extends AppCompatActivity {
                     for (QueryDocumentSnapshot document: task.getResult()){
                         Log.d("tag",document.getId());
                         String id = ""+ document.getId()+"";
-                        questionName temp = new questionName(id);
-                        temp.setId(id + "",count++);
-                        myQuestionNames.add(temp);
+                        boolean status = (boolean) document.get("isApproved");
+                        if(status) {
+                            questionName temp = new questionName(id);
+                            temp.setId(id + "", count++);
+                            myQuestionNames.add(temp);
+                        }
                     }
                     Log.d("tag",myQuestionNames.get(0).name);
                     int n = myQuestionNames.size();
@@ -112,26 +114,32 @@ public class QuestionsActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+                if (!questionsArrayAdapter.isEmpty())
+                {
+                    questionsListView.setAdapter(questionsArrayAdapter);
+                    questionsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            Intent intent = new Intent(QuestionsActivity.this,CodeActivity.class);
+                            Log.d("idQ",idArrayList.get(position)+"");
+                            intent.putExtra("id1", id1);
+                            intent.putExtra("id2", myQuestionNames.get(position).id);
+                            intent.putExtra("language", lang);
+                            startActivity(intent);
 
+                        }
+                    });
+                    TextView msgTextView =  findViewById(R.id.emptymsg);
+                    msgTextView.setVisibility(View.INVISIBLE);
+                }
+                else
+                {
+                    TextView msgTextView =  findViewById(R.id.emptymsg);
+                    msgTextView.setVisibility(View.VISIBLE);
+                }
 
-                questionsListView.setAdapter(questionsArrayAdapter);
-                questionsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        Intent intent = new Intent(QuestionsActivity.this,CodeActivity.class);
-                        Log.d("idQ",idArrayList.get(position)+"");
-                        intent.putExtra("id1",id1);
-                        intent.putExtra("id2",myQuestionNames.get(position).id);
-                        intent.putExtra("language",lang);
-                        startActivity(intent);
-
-                    }
-                });
             }
         },3000);
-
-
-
     }
 }
 

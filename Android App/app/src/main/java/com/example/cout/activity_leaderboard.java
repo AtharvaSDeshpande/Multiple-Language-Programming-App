@@ -53,7 +53,7 @@ public class activity_leaderboard extends AppCompatActivity {
                 //progressBarInsideText.setVisibility(View.GONE);
             }
 
-        }, 2000);
+        }, 3000);
 
         // userScoreList.setAdapter(arrayAdapter);
 //        new Handler().postDelayed(new Runnable() {

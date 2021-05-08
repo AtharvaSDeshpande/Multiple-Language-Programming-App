@@ -24,7 +24,7 @@ public class DiscussionActivity extends AppCompatActivity {
     ArrayAdapter arrayAdapter;
 
     String UserEmail, SelectedQuest, user_msg_key;
-    private DatabaseReference dbr;
+    public DatabaseReference dbr;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

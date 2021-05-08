@@ -16,6 +16,8 @@ import com.google.android.material.snackbar.Snackbar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.view.View;
+import android.widget.TextView;
+
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -97,7 +99,7 @@ public class AdminActivity extends AppCompatActivity {
                     questionsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            Intent intent = new Intent(AdminActivity.this, CodeActivity.class);
+                            Intent intent = new Intent(AdminActivity.this, AdminActivityCode.class);
                             Log.d("idQ", idArrayList.get(position) + "");
                             intent.putExtra("flag",1);
                             intent.putExtra("id1", id1);
@@ -107,9 +109,13 @@ public class AdminActivity extends AppCompatActivity {
 
                         }
                     });
+                    TextView msgTextView =  findViewById(R.id.emptymsg);
+                    msgTextView.setVisibility(View.INVISIBLE);
                 }
                 else{
                     System.out.println("no data in array");
+                    TextView msgTextView =  findViewById(R.id.emptymsg);
+                    msgTextView.setVisibility(View.VISIBLE);
                 }
             }
         }, 3000);

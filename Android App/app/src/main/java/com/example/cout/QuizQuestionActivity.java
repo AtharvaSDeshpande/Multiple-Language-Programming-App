@@ -23,6 +23,7 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class QuizQuestionActivity extends AppCompatActivity {
@@ -31,10 +32,10 @@ public class QuizQuestionActivity extends AppCompatActivity {
     Button a,b,c,d;
     FloatingActionButton qnext,qprev;
     ImageButton backbtn;
-
+    ArrayList<String> quizidArrayList;
     String opa,opb,opc,opd;
-    String id1,id2,questName,language;
-
+    String id1,id2,questName;
+    int UB;
     int Ans,k1,size1;
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -52,6 +53,7 @@ public class QuizQuestionActivity extends AppCompatActivity {
 //    });
 
     public void getdatafromfirestore(){
+//        id2 = quizidArrayList.get(k1);
         final DocumentReference docRef = db.collection("topics").document(id1).collection("quizQuestions").document(id2);
         docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
@@ -91,12 +93,15 @@ public class QuizQuestionActivity extends AppCompatActivity {
 
         Intent i  = getIntent();
         id1   = i.getStringExtra("id1");
-        id2   = i.getStringExtra("id2");
-        language = i.getStringExtra("language");
+//        id2   = i.getStringExtra("id2");
+//        language = i.getStringExtra("language");
         k1 = i.getIntExtra("k1",0);
-       //size1=i.getIntExtra("size1",0);
+        UB = i.getIntExtra("UB",0);
+        quizidArrayList = i.getStringArrayListExtra("array");
+        id2 = quizidArrayList.get(k1);
+        //size1=i.getIntExtra("size1",0);
 
-        Log.d("id",id1);
+        Log.d("id",id2);
         //Toast.makeText(this,size1,Toast.LENGTH_SHORT).show();
 //        if(k1==0){
 //            qprev.setVisibility(View.GONE);
@@ -109,13 +114,20 @@ public class QuizQuestionActivity extends AppCompatActivity {
 
         getUIs();
 
+        if (k1 == 0)
+            qprev.setVisibility(View.GONE);
+        if (k1==UB-1)
+        {
+            qnext.setVisibility(View.GONE);
+        }
+        backbtn.setVisibility(View.GONE);
         a.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 setbtnsGray();
                 if(Ans==1){
-                    a.setBackgroundColor(Color.GREEN);
+                    a.setBackgroundColor(Color.parseColor("#0EC500"));
                 }
                 else {
                     a.setBackgroundColor(Color.RED);
@@ -129,7 +141,7 @@ public class QuizQuestionActivity extends AppCompatActivity {
             public void onClick(View v) {
                 setbtnsGray();
                 if(Ans==2){
-                    b.setBackgroundColor(Color.GREEN);
+                    b.setBackgroundColor(Color.parseColor("#0EC500"));
                 }
                 else {
                     b.setBackgroundColor(Color.RED);
@@ -143,7 +155,7 @@ public class QuizQuestionActivity extends AppCompatActivity {
             public void onClick(View v) {
                 setbtnsGray();
                 if(Ans==3){
-                    c.setBackgroundColor(Color.GREEN);
+                    c.setBackgroundColor(Color.parseColor("#0EC500"));
                 }
                 else {
                     c.setBackgroundColor(Color.RED);
@@ -157,7 +169,7 @@ public class QuizQuestionActivity extends AppCompatActivity {
             public void onClick(View v) {
                 setbtnsGray();
                 if(Ans==4){
-                    d.setBackgroundColor(Color.GREEN);
+                    d.setBackgroundColor(Color.parseColor("#0EC500"));
                 }
                 else {
                     d.setBackgroundColor(Color.RED);
@@ -169,38 +181,85 @@ public class QuizQuestionActivity extends AppCompatActivity {
         qnext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(QuizQuestionActivity.this,QuizQuestionActivity.class);
-                k1++;
-                intent.putExtra("id1",id1);
-                intent.putExtra("id2","mcqid"+k1);
-                intent.putExtra("k1",k1++);
-                startActivity(intent);
+//                Intent intent = new Intent(QuizQuestionActivity.this,QuizQuestionActivity.class);
+//                System.out.println(UB);
+                if (k1<UB-1)
+                {
+                    k1++;
+                    id2 = quizidArrayList.get(k1);
+                    getdatafromfirestore();
+                    getUIs();
+                    setbtnsGray();
+                    setbtnClickablaTrue();
+//                    qnext.setVisibility(View.VISIBLE);
+
+                }
+
+                if (k1 == 0)
+                    qprev.setVisibility(View.GONE);
+                else
+                    qprev.setVisibility(View.VISIBLE);
+                if (k1==UB-1)
+                {
+                    qnext.setVisibility(View.GONE);
+                }
+                else
+                {
+                    qnext.setVisibility(View.VISIBLE);
+                }
+//                intent.putExtra("id1",id1);
+//                intent.putExtra("id2","mcqid"+k1);
+//                intent.putExtra("k1",k1++);
+//                startActivity(intent);
 
             }
         });
         qprev.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(QuizQuestionActivity.this,QuizQuestionActivity.class);
-                k1--;
-                intent.putExtra("id1",id1);
-                intent.putExtra("id2","mcqid"+k1);
-                intent.putExtra("k1",k1--);
-                startActivity(intent);
+//                Intent intent = new Intent(QuizQuestionActivity.this,QuizQuestionActivity.class);
+                if (k1>0)
+                {
+                    k1--;
+                    id2 = quizidArrayList.get(k1);
+                    getdatafromfirestore();
+                    getUIs();
+                    setbtnsGray();
+                    setbtnClickablaTrue();
+//                    qprev.setVisibility(View.VISIBLE);
+
+                }
+
+                if (k1 == 0)
+                    qprev.setVisibility(View.GONE);
+                else
+                    qprev.setVisibility(View.VISIBLE);
+                if (k1==UB-1)
+                {
+                    qnext.setVisibility(View.GONE);
+                }
+                else
+                {
+                    qnext.setVisibility(View.VISIBLE);
+                }
+//                intent.putExtra("id1",id1);
+//                intent.putExtra("id2","mcqid"+k1);
+//                intent.putExtra("k1",k1--);
+//                startActivity(intent);
             }
         });
 
-        backbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-               //onBackPressed();
-                //finish();
-                Intent intent = new Intent(QuizQuestionActivity.this, Topics.class);
-                intent.putExtra("flag",2);
-                startActivity(intent);
-
-            }
-        });
+//        backbtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //onBackPressed();
+//                //finish();
+//                Intent intent = new Intent(QuizQuestionActivity.this, Topics.class);
+//                intent.putExtra("flag",2);
+//                startActivity(intent);
+//
+//            }
+//        });
 
     }
 
@@ -212,6 +271,7 @@ public class QuizQuestionActivity extends AppCompatActivity {
         d =(Button) findViewById(R.id.D);
         qnext = (FloatingActionButton)findViewById(R.id.qnext);
         qprev = (FloatingActionButton)findViewById(R.id.qprev);
+
         backbtn = (ImageButton)findViewById(R.id.backbtn);
     }
 
@@ -222,10 +282,22 @@ public class QuizQuestionActivity extends AppCompatActivity {
         d.setClickable(false);
     }
 
-    void setbtnsGray(){
-        a.setBackgroundColor(Color.LTGRAY);
-        b.setBackgroundColor(Color.LTGRAY);
-        c.setBackgroundColor(Color.LTGRAY);
-        d.setBackgroundColor(Color.LTGRAY);
+    void setbtnClickablaTrue(){
+        a.setClickable(true);
+        b.setClickable(true);
+        c.setClickable(true);
+        d.setClickable(true);
+        a.setBackgroundColor(Color.parseColor("#0C1A3C"));
+        b.setBackgroundColor(Color.parseColor("#0C1A3C"));
+        c.setBackgroundColor(Color.parseColor("#0C1A3C"));
+        d.setBackgroundColor(Color.parseColor("#0C1A3C"));
     }
+
+    void setbtnsGray(){
+        a.setBackgroundColor(Color.GRAY);
+        b.setBackgroundColor(Color.GRAY);
+        c.setBackgroundColor(Color.GRAY);
+        d.setBackgroundColor(Color.GRAY);
+    }
+
 }

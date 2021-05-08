@@ -10,13 +10,17 @@
         android:title="logout"
         >
     </item>
-    <item
-        android:id="@+id/aa"
-        android:orderInCategory="200"
-        app:showAsAction="never"
-        android:title="update profile"
-        >
-    </item>
+<!--    <item-->
+<!--        android:id="@+id/aa"-->
+<!--        android:orderInCategory="200"-->
+<!--        app:showAsAction="never"-->
+<!--        android:title="update profile"-->
+<!--        >-->
+<!--    </item>-->
+    <item android:id="@+id/admin_switch"
+        android:title="Switch to Admin"
+        android:orderInCategory="100"
+        app:showAsAction="never"/>
 
 
 </menu>

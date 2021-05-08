@@ -9,6 +9,7 @@
 
     >
 
+
     <View
         android:id="@+id/view"
         android:layout_width="match_parent"
@@ -16,19 +17,18 @@
         android:background="@drawable/curve1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
-
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="303dp"
-        android:layout_height="163dp"
-        android:layout_marginStart="40dp"
+        android:layout_width="335dp"
+        android:layout_height="170dp"
+        android:layout_marginStart="35dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="40dp"
+        android:layout_marginEnd="35dp"
         android:background="@drawable/blackcard"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -62,7 +62,7 @@
 
                 <ImageView
                     android:id="@+id/btnLeaderboard"
-                    android:layout_width="80dp"
+                    android:layout_width="50dp"
                     android:layout_height="100dp"
                     android:layout_gravity="center"
                     android:layout_marginBottom="8dp"
@@ -73,9 +73,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:capitalize="none"
                     android:text="Leaderboard"
+                    android:textAlignment="center"
                     android:textColor="#FFFFFF"
-                    android:textSize="12sp" />
+                    android:textSize="10sp" />
 
             </LinearLayout>
 
@@ -89,7 +91,7 @@
 
                 <ImageView
                     android:id="@+id/btnWeb"
-                    android:layout_width="80dp"
+                    android:layout_width="50dp"
                     android:layout_height="100dp"
                     android:layout_gravity="center"
                     android:layout_marginBottom="8dp"
@@ -100,9 +102,71 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:capitalize="none"
                     android:text="Websites"
+                    android:textAlignment="center"
                     android:textColor="#FFFFFF"
-                    android:textSize="12sp" />
+                    android:textSize="10sp" />
+
+            </LinearLayout>
+
+            <!--            //approve button for admin-->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/btnApprove"
+                    android:layout_width="50dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="8dp"
+                    android:src="@drawable/ic_admin_round" />
+
+                <TextView
+                    android:id="@+id/textApprove"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:capitalize="none"
+                    android:text="Approve/Reject"
+                    android:textAlignment="center"
+                    android:textColor="#FFFFFF"
+                    android:textSize="10sp" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/btnProf"
+                    android:layout_width="50dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="8dp"
+                    android:src="@drawable/ic_prof_round" />
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:capitalize="none"
+                    android:text="Profile"
+                    android:textAlignment="center"
+                    android:textColor="#FFFFFF"
+                    android:textSize="10sp" />
 
             </LinearLayout>
 
@@ -115,23 +179,28 @@
                 android:orientation="vertical">
 
                 <ImageView
-                    android:id="@+id/btnProf"
-                    android:layout_width="80dp"
+                    android:id="@+id/btnquiz"
+                    android:layout_width="50dp"
                     android:layout_height="100dp"
                     android:layout_gravity="center"
+                    android:layout_marginRight="3dp"
                     android:layout_marginBottom="8dp"
-                    android:src="@drawable/ic_prof_round" />
+                    android:src="@drawable/quiz" />
 
                 <TextView
-                    android:id="@+id/textView2"
+                    android:id="@+id/textViewquiz"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="Profile"
+                    android:capitalize="none"
+                    android:text="Quiz
+"
+                    android:textAlignment="center"
                     android:textColor="#FFFFFF"
-                    android:textSize="12sp" />
+                    android:textSize="10sp" />
 
             </LinearLayout>
+
 
         </LinearLayout>
 
@@ -177,5 +246,7 @@
         app:layout_constraintStart_toStartOf="@+id/gifImageView2"
         app:layout_constraintTop_toBottomOf="@+id/btncode"
         app:layout_constraintVertical_bias="1.0" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

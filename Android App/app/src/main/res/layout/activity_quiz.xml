@@ -4,20 +4,34 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#2196F3"
+    android:background="#0C1A3C"
     tools:context=".QuizActivity">
+
+    <TextView
+        android:id="@+id/emptymsg2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Currently no questions are available. Come back later."
+        android:textColor="@android:color/black"
+        android:textSize="14sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/quizQues"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/quizQues"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ListView
         android:id="@+id/quizQues"
-        android:layout_width="367dp"
-        android:layout_height="571dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_alignParentEnd="true"
-        android:background="#03A9F4"
+        android:background="#bbdefb"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.755"></ListView>
+        app:layout_constraintVertical_bias="0.0"></ListView>
 
     <ProgressBar
         android:id="@+id/quizprogressBar"

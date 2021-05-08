@@ -39,15 +39,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
-public class CodeActivity extends AppCompatActivity {
-    String id,questName;
+public class AdminActivityCode extends AppCompatActivity {
+    String id1,id2,questName,language;
     TextView tvResult;
+    boolean approval;
 
     EditText etInput,header,answer,problemStatement;
     String answer_1,answer_2,publicTestCase,privateTestCase;
     String currentuser = FirebaseAuth.getInstance().getCurrentUser().getUid();
-    Button btnSubmit,btnRun,btnDiscuss;
+    Button btnSubmit,btnRun,btnApprove,btnDeny;
     String userName;
     question myQuestion = new question();
     // Access a Cloud Firestore instance from your Activity
@@ -55,7 +55,6 @@ public class CodeActivity extends AppCompatActivity {
     final String TAG = "TAG";
     int marks,counterques;
     boolean incrementMarks = true;
-    String id1,id2,language;
     public void getMarksDataFromFirestore()
     {
         final DocumentReference docRef =db.collection("UsersInfo").document(currentuser);
@@ -70,6 +69,9 @@ public class CodeActivity extends AppCompatActivity {
         });
 
         Log.d("User",incrementMarks+"");
+//        {
+//            incrementMarks = true;
+//        }
         docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -90,7 +92,7 @@ public class CodeActivity extends AppCompatActivity {
     }
     public void getCodeDataFromFirestore(){
         myQuestion = new question();
-        final DocumentReference docRef = db.collection("topics").document(id1).collection("questions").document(id2);;
+        final DocumentReference docRef = db.collection("topics").document(id1).collection("questions").document(id2);
         docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -122,7 +124,7 @@ public class CodeActivity extends AppCompatActivity {
             }
         });
 
-     }
+    }
 
 
     @Override
@@ -130,23 +132,24 @@ public class CodeActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_code);
-
+        setContentView(R.layout.activity_admin_code);
         int flag =0;
         Intent i  = getIntent();
         flag = i.getIntExtra("flag",0);
         id1   = i.getStringExtra("id1");
         id2   = i.getStringExtra("id2");
         language = i.getStringExtra("language");
+        Log.d("id",id1);
 
         getCodeDataFromFirestore();
         tvResult  = findViewById(R.id.tv_result);
         header = findViewById(R.id.header);
         answer = findViewById(R.id.answer);
         etInput   = findViewById(R.id.et_input);
-        btnDiscuss = findViewById(R.id.btnDiscuss);
         btnSubmit = findViewById(R.id.btn_submit);
         btnRun = findViewById(R.id.btn_run);
+        btnApprove = findViewById(R.id.btnApprove);
+        btnDeny = findViewById(R.id.btnDeny);
         problemStatement = findViewById(R.id.problemStatement);
         answer_1 = "} \n int main() \n { \n";
         answer_2 = "\n return 0; \n }  ";
@@ -157,20 +160,42 @@ public class CodeActivity extends AppCompatActivity {
         header.setText(questionHeader);
         etInput.setText("");
         answer.setText("");
+        System.out.println("flag:"+flag);
+        if(flag ==1 )
+        {
+            btnDeny.setVisibility(View.VISIBLE);
+            btnSubmit.setVisibility(View.VISIBLE);
+            btnApprove.setVisibility(View.VISIBLE);
+        }
+        else{
+            btnSubmit.setVisibility(View.VISIBLE);
+            btnDeny.setVisibility(View.GONE);
+            btnApprove.setVisibility(View.GONE);
+        }
 
-
-        btnDiscuss.setOnClickListener(new View.OnClickListener() {
+        btnApprove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final Intent intent = new Intent(CodeActivity.this,DiscussionActivity.class);
-                System.out.println("question name: "+questName);
-                intent.putExtra("selected_quest", questName);
-                String userEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-                System.out.println("email: "+userEmail);
-                intent.putExtra("user_email", userEmail);
-                startActivity(intent);
+                final DocumentReference docRef = db.collection("topics")
+                        .document(id1).collection("questions")
+                        .document(id2);
+                docRef.update("isApproved",true);
+
+                Toast.makeText(AdminActivityCode.this,"Question approved for publishing ",Toast.LENGTH_LONG).show();
+                btnApprove.setVisibility(View.GONE);
+                btnDeny.setVisibility(View.GONE);
+
             }
         });
+
+        btnDeny.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(AdminActivityCode.this,"Your question isn't approved for publishing",Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
 
         btnRun.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -193,18 +218,18 @@ public class CodeActivity extends AppCompatActivity {
 
 
                                 JSONObject responseJson = new JSONObject(response.body().toString());
-                                Log.d("resp",responseJson.toString());
+
                                 String output = responseJson.getString("output");
                                 Log.d("op",output);
                                 tvResult.setText(output);
 
                             }else{
 
-                                Toast.makeText(CodeActivity.this, response.errorBody().string(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(AdminActivityCode.this, response.errorBody().string(), Toast.LENGTH_SHORT).show();
                             }
 
                         } catch (JSONException e) {
-                            Toast.makeText(CodeActivity.this, "Gagal Parsing JSON : " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AdminActivityCode.this, "Gagal Parsing JSON : " + e.getMessage(), Toast.LENGTH_SHORT).show();
 
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -214,13 +239,14 @@ public class CodeActivity extends AppCompatActivity {
                     public void onFailure(Call<String> call, Throwable t) {
 
                         tvResult.setText("Failed");
-                        Toast.makeText(CodeActivity.this, "Gagal : " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AdminActivityCode.this, "Gagal : " + t.getMessage(), Toast.LENGTH_SHORT).show();
 
                     }
                 });
 
             }
         });
+
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -242,13 +268,11 @@ public class CodeActivity extends AppCompatActivity {
 
 
                                 JSONObject responseJson = new JSONObject(response.body().toString());
-                                Log.d("T",responseJson.toString());
                                 String output = "NOT PASSED",submitOutput = responseJson.getString("output");
                                 boolean isCorrect = false;
                                 if (submitOutput.equals(myQuestion.privateTestCaseOutput))
                                 {
-
-                                    output = submitOutput+"\n"+"In CPU time = "+responseJson.getString("cpuTime") + "\n\n" + "PASSED" + "\n";
+                                    output = submitOutput + "\n\n" + "PASSED";
                                     isCorrect = true;
                                 }
                                 tvResult.setText(output);
@@ -258,35 +282,35 @@ public class CodeActivity extends AppCompatActivity {
                                     new Handler().postDelayed(new Runnable() {
                                         @Override
                                         public void run() {
-                                                    if (incrementMarks)
-                                                    {
+                                            if (incrementMarks)
+                                            {
 
 
-                                                        counterques++;
+                                                counterques++;
 
-                                                        marks+=10;
+                                                marks+=10;
 
-                                                        Map<String, Object> data = new HashMap<>();
-                                                        data.put("Score", marks);
-                                                        data.put("questionsSolved",counterques);
-                                                        Map <String,Object> doc = new HashMap<>();
-                                                        doc.put("Score",1);
-                                                        doc.put("questionsSolved",1);
-                                                        db.collection("UsersInfo").document(currentuser).set(data, SetOptions.merge());
-                                                        db.collection("UsersInfo").document(currentuser).collection("submitted").document(id).set(doc);
+                                                Map<String, Object> data = new HashMap<>();
+                                                data.put("Score", marks);
+                                                data.put("questionsSolved",counterques);
+                                                Map <String,Object> doc = new HashMap<>();
+                                                doc.put("Score",1);
+                                                doc.put("questionsSolved",1);
+                                                db.collection("UsersInfo").document(currentuser).set(data, SetOptions.merge());
+                                                db.collection("UsersInfo").document(currentuser).collection("submitted").document(id2).set(doc);
 
-                                                    }
-                                               }
+                                            }
+                                        }
                                     },3000);
 
                                 }
                             }else{
 
-                                Toast.makeText(CodeActivity.this, response.errorBody().string(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(AdminActivityCode.this, response.errorBody().string(), Toast.LENGTH_SHORT).show();
                             }
 
                         } catch (JSONException e) {
-                            Toast.makeText(CodeActivity.this, "Gagal Parsing JSON : " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AdminActivityCode.this, "Gagal Parsing JSON : " + e.getMessage(), Toast.LENGTH_SHORT).show();
 
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -296,7 +320,7 @@ public class CodeActivity extends AppCompatActivity {
                     public void onFailure(Call<String> call, Throwable t) {
 
                         tvResult.setText("Failed");
-                        Toast.makeText(CodeActivity.this, "Gagal : " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AdminActivityCode.this, "Gagal : " + t.getMessage(), Toast.LENGTH_SHORT).show();
 
                     }
                 });

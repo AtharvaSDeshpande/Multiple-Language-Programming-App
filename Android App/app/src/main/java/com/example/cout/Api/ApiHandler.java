@@ -14,14 +14,16 @@ public class ApiHandler {
 
     public static final String API_ID = BuildConfig.API_ID;
     public static final String API_SECRET = BuildConfig.API_SECRET;
-    public static  String LANGUAGE = "java";
-    public static final String VERSION_INDEX = "1";
+    public static String LANGUAGE;
+    public static String VERSION_INDEX = "0";
 
 
     private static Retrofit retrofit;
 
     public static ApiService getRetrofitInstance(String lang){
         LANGUAGE = lang;
+
+
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();

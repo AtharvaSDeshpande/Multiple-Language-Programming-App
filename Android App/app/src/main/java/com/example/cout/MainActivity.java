@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this,"Login Failed!",Toast.LENGTH_SHORT).show();
                 }
                 else
-                    validate(E_mail.getText().toString(),Password.getText().toString());
+                validate(E_mail.getText().toString(),Password.getText().toString());
             }
         });
 
