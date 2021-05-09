@@ -12,7 +12,7 @@ Cout is a mobile coding IDE to provide an online platform for students/ (new) de
 
 # Android App
 
-[Download the APK](https://firebasestorage.googleapis.com/v0/b/cout-1c9d9.appspot.com/o/Cout%20App.apk?alt=media&token=687a2933-80cf-4aed-bddb-04e9ceca871b)
+[Download the APK](https://firebasestorage.googleapis.com/v0/b/cout-1c9d9.appspot.com/o/Cout.apk?alt=media&token=885426bc-d7f6-4ed1-ae02-5a9c5c66ab98)
 
 # Backend Server (To Add Questions)
 
